@@ -1,15 +1,17 @@
 # Site Settings
-name: Jekflix
-title: Jekflix | A blog theme for Jekyll
-description: Jekflix is a template for Jekyll inspired by Netflix and made by
-  Thiago Rossener.
+name: trollzor's CyberSec blog 
+title: trollzor's CyberSec blog
+description: You'll find here mainly writeups of various HackTheBox boxes/challenges and rarely CTF challenges solves.
+
 tags:
   - blog
-  - template
-  - jekyll
-  - theme
-  - netlify
-show_hero: true
+  - hackthebox
+  - writeups
+  - ctf
+
+show_hero: false
+paginate: 10
+
 menu:
   - title: Home
     url: /
@@ -17,26 +19,21 @@ menu:
     url: /about
   - title: Contact
     url: /contact
-  - title: Feed
-    url: /feed.xml
-email: youremail@test.com
-disqus_username: disqus_username
+
+email: trollzorhacks@gmail.com
+disqus_username: trollzorftw
 
 
 # Social Media Settings
 # Remove the item if you don't need it
-github_username: github_username
-facebook_username: facebook_username
-twitter_username: twitter_username
-instagram_username: instagram_username
-linkedin_username: linkedin_username
-medium_username: medium_username
+github_username: TrollzorFTW
+twitter_username: trollzorhacks
 
 
 # Posts Settings
 show_time_bar: true
 show_modal_on_exit: false
-show_modal_on_finish_post: true
+show_modal_on_finish_post: false
 two_columns_layout: true
 
 
@@ -97,7 +94,8 @@ exclude: [
   'Gemfile',
   'Gemfile.lock',
   'gulpfile.js',
-  'README.md'
+  'README.md',
+  'vendor'
 ]
 
 # Theme

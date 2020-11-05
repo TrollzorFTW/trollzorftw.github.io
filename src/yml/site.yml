@@ -1,14 +1,16 @@
-name: Jekflix
-title: Jekflix | A blog theme for Jekyll
-description: Jekflix is a template for Jekyll inspired by Netflix and made by
-  Thiago Rossener.
+name: trollzor's CyberSec blog 
+title: trollzor's CyberSec blog
+description: You'll find here mainly writeups of various HackTheBox boxes/challenges and rarely CTF challenges solves.
+
 tags:
   - blog
-  - template
-  - jekyll
-  - theme
-  - netlify
-show_hero: true
+  - hackthebox
+  - writeups
+  - ctf
+
+show_hero: false
+paginate: 10
+
 menu:
   - title: Home
     url: /
@@ -16,7 +18,6 @@ menu:
     url: /about
   - title: Contact
     url: /contact
-  - title: Feed
-    url: /feed.xml
-email: youremail@test.com
-disqus_username: disqus_username
+
+email: trollzorhacks@gmail.com
+disqus_username: trollzorftw
