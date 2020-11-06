@@ -194,8 +194,10 @@ Output:secarmyxoritup
 ### Flag 9
 We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which ``QWERTY`` is repeated several times. Also, there were some DNS queries to ``dcode.fr``.
 
-We obtain a password from the long text: ``mjwfr?2b6j3a5fx/c.``
-
+We obtain a password from the long text: 
+```
+mjwfr?2b6j3a5fx/c.
+```
 
 Using keyboard shift cipher on [dcode.fr](https://www.dcode.fr/keyboard-shift-cipher) with settings: 
 
