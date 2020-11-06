@@ -43,7 +43,7 @@ Giving us the credentials for uno user:
 We read readme.txt and we get: 
 "You surely can guess the username , the password will be: 4b3l4rd0fru705"
 
-We try escalation to dos with password 4b3l4rd0fru705 and we get access
+We try escalation to ``dos`` with password ``4b3l4rd0fru705`` and we get access
 
 
 After reading readme.txt we run the following command:
@@ -88,18 +88,24 @@ Which gives us:
 ```
  Welcome to SVOS Password Recovery Facility!
  Enter the super secret token to proceed: 
- Here's your login credentials for the third user tres:r4f43l71n4j3r0
+ Here's your login credentials for the third user ``tres:r4f43l71n4j3r0``
 ```
 
 ### Flag 4
-We get a binary which we need to reverse.Using gdb-peda as our reverse tool, we run the binary and close it when it prompts us to enter the key. Because I was unable to breakpoint anywhere in the main function, I tried to find "keywords" that might be in the binary.The command "find 'credentials'" worked and I got:
+We get a binary which we need to reverse.
+
+Using gdb-peda as our reverse tool, we run the binary and close it (Ctrl+C) when it prompts us to enter the key. 
+
+Because I was unable to breakpoint anywhere in the main function, I tried to find ``keywords`` that might be in the binary.
+
+The command ``find 'credentials'`` in gdb-peda shell worked and I got:
 
 ```bash
 mapped : 0x7ffff7ffb09b ("credentials for the fourth user cuatro:p3dr00l1v4r3z")
 ```
 
 ### Flag 5
-The todo.txt tells us to go to /justanothergallery on the webserver
+The todo.txt tells us to go to ``/justanothergallery`` on the webserver
 
 After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/
 
@@ -129,7 +135,8 @@ Hello and congrats for solving this challenge,
 we hope that you enjoyed the challenges we presented so far. 
 It is time for us to increase the difficulty level and make 
 the upcoming challenges more challenging than previous ones. 
-Before you move to the next challenge, here are the credentials for the 5th user: cinco:ruy70m35 
+Before you move to the next challenge, here are the credentials 
+for the 5th user: cinco:ruy70m35 
 head over to this user and get your 5th flag! goodluck for the upcoming challenges!
 ```
 
@@ -142,15 +149,17 @@ chmod 444 shadow.bak && cat shadow.bak | grep seis
 seis:$6$MCzqLn0Z2KB3X3TM$opQCwc/JkRGzfOg/WTve8X/zSQLwVf98I.RisZCFo0mTQzpvc5zqm/0OJ5k.PITcFJBnsn7Nu2qeFP8zkBwx7.:18532:0:99999:7:::
 ```
 
-Cracking the hash gives us the password: Hogwarts , so creds: seis:Hogwarts
+Cracking the hash gives us the password ``Hogwarts`` , so the credentials are: ``seis:Hogwarts``
 
 
 ### Flag 7
-The readme.txt file gives us the following path: "head over to /shellcmsdashboard webpage and find the credentials!"
-After trying a bit with hydra, having no success because no message on fail. 
-I decided to bruteforce login on burp sniper attack obtaining the password "qwerty".
+The readme.txt file gives us the following path: "head over to ``/shellcmsdashboard`` webpage and find the credentials!".
 
-Logged in and got the message: "head over to /aabbzzee.php" 
+I decided to bruteforce login with BurpSuite sniper attack with first 100  ``rockyou.txt`` passwords.
+
+The only password with a different length than the other ones was ``qwerty``.
+
+Logged in and got the message: ``head over to /aabbzzee.php`` 
 
 This page will give us an easy command injection box where we will get a reverse shell from.
 
@@ -164,7 +173,7 @@ Netcat reverse shell on LISTEN-PORT on the attacker box:
 ```bash
 nc -nvlp LISTEN-PORT
 ```
-Getting www-data shell where we get the seventh user password: 6u1l3rm0p3n473
+Getting ``www-data`` shell which gives us the seventh user password: ``6u1l3rm0p3n473``
 
 
 ### Flag 8
@@ -183,13 +192,13 @@ Output:secarmyxoritup
 
 
 ### Flag 9
-We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which "QWERTY" is repeated a lot. Also, there were some dns queries to dcode.fr so there is a hint of that too.
+We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which ``QWERTY`` is repeated several times. Also, there were some DNS queries to ``dcode.fr``.
 
 We obtain a password from the long text: 
-```mjwfr?2b6j3a5fx/c .```
+```mjwfr?2b6j3a5fx/c.```
 
 
-Using dcode.fr and use keyboard shift cipher with settings: 
+Using keyboard shift cipher on [dcode.fr](https://www.dcode.fr/keyboard-shift-cipher) with settings: 
 
 	-QWERTY(US) 
 
