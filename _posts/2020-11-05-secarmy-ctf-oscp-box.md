@@ -107,7 +107,7 @@ mapped : 0x7ffff7ffb09b ("credentials for the fourth user cuatro:p3dr00l1v4r3z")
 ### Flag 5
 The todo.txt tells us to go to ``/justanothergallery`` on the webserver
 
-After analyzing a little bit we get a bunch of qr images in: http://192.168.100.33/justanothergallery/qr/
+After analyzing a little bit we get a bunch of qr images in: ``http://192.168.100.33/justanothergallery/qr/``
 
 
 Downloading them all and decoding the qr codes with a simple python script gives us the next credentials and flag:
@@ -194,8 +194,7 @@ Output:secarmyxoritup
 ### Flag 9
 We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which ``QWERTY`` is repeated several times. Also, there were some DNS queries to ``dcode.fr``.
 
-We obtain a password from the long text: 
-```mjwfr?2b6j3a5fx/c.```
+We obtain a password from the long text: ``mjwfr?2b6j3a5fx/c.``
 
 
 Using keyboard shift cipher on [dcode.fr](https://www.dcode.fr/keyboard-shift-cipher) with settings: 
